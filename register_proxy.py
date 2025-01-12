@@ -1,5 +1,15 @@
+import os
 import boto3
 import requests
+
+
+def read_ddb_env_variable():
+    ddb_env_variable = os.environ.get('REGISTER_TABLE')
+    if env_variable:
+        print(f"The value of MY_ENV_VARIABLE is: {env_variable}")
+        return(ddb_env_variable)
+    else:
+        print("MY_ENV_VARIABLE is not set.")
 
 def get_public_ipv4(token):
     url = "http://169.254.169.254/latest/meta-data/public-ipv4"
@@ -26,7 +36,7 @@ def insert_public_ip_dynamodb():
     dynamodb = boto3.resource('dynamodb', region_name='us-west-2')
 
     # Specify the table name
-    table_name = 'proxy_db'
+    table_name = read_ddb_env_variable()
     table = dynamodb.Table(table_name)
 
     # Create the item to be inserted
