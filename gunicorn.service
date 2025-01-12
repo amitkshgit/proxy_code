@@ -6,7 +6,8 @@ After=network.target
 User=ubuntu
 Group=1000
 WorkingDirectory=/home/ubuntu/webdocs
-ExecStart=/usr/bin/gunicorn --workers=2 --reload test:app -b unix:/tmp/gunicorn.sock
+Environment="PATH=/home/ubuntu/miniconda3/bin
+ExecStart=/home/ubuntu/miniconda3/bin/gunicorn --workers=2 --reload test:app -b unix:/tmp/gunicorn.sock
 
 [Install]
 WantedBy=multi-user.target
