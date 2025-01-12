@@ -1,6 +1,21 @@
 import requests
 import os
 
+
+def get_public_ipv4(token):
+    url = "http://169.254.169.254/latest/meta-data/public-ipv4"
+    headers = {"X-aws-ec2-metadata-token": token}
+    response = requests.get(url, headers=headers)
+    public_ipv4 = response.text
+    return public_ipv4
+
+def get_aws_token():
+    url = "http://169.254.169.254/latest/api/token"
+    headers = {"X-aws-ec2-metadata-token-ttl-seconds": "21600"}
+    response = requests.put(url, headers=headers)
+    token = response.text
+    return token
+
 config_text = """
 error_log /var/log/nginx/error.log;
 include /etc/nginx/modules-enabled/*.conf;
@@ -71,8 +86,8 @@ http {
 }"""
 
 # Fetch the public IP from EC2 metadata
-response = requests.get('http://169.254.169.254/latest/meta-data/public-ipv4')
-public_ip = response.text
+token = get_aws_token()
+public_ip = get_public_ipv4(token)
 
 # Replace the placeholder with the actual public IP
 config_text = config_text.replace('server_name w.x.y.z;', f'server_name {public_ip};')
