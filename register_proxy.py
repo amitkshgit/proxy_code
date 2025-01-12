@@ -26,7 +26,7 @@ def insert_public_ip_dynamodb():
     dynamodb = boto3.resource('dynamodb', region_name='us-west-2')
 
     # Specify the table name
-    table_name = 'your_table_name'
+    table_name = 'proxy_db'
     table = dynamodb.Table(table_name)
 
     # Create the item to be inserted
