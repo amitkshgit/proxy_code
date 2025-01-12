@@ -56,7 +56,7 @@ http {
     client_max_body_size 4G;
 
     # set the correct host(s) for your site
-    server_name w.x.y.z;    <-- Change this to the ec2 hostname
+    server_name w.x.y.z;
 
     keepalive_timeout 5;
 
