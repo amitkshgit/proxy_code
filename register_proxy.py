@@ -1,7 +1,22 @@
+import re
 import os
 import boto3
 import requests
 
+
+def path_to_call():
+    file_path = "/etc/systemd/system/gunicorn.service"
+    with open(file_path, 'r') as file:
+        content = file.read()
+
+    pattern = r'--reload\s*(.*?)\s*-b'
+    match = re.search(pattern, content)
+
+    if match:
+        result = match.group(1).replace(' ', '')
+        return result
+    else:
+        return None
 
 def read_ddb_env_variable():
     ssm_client = boto3.client('ssm', region_name='us-east-2')
@@ -41,6 +56,7 @@ def insert_public_ip_dynamodb():
     item = {
         'ipaddress': public_ipv4,
         'health': 'ok'
+        'url': path_to_call()
     }
 
     # Insert the item into the DynamoDB table
