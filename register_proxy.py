@@ -53,10 +53,11 @@ def insert_public_ip_dynamodb():
     table = dynamodb.Table(table_name)
 
     # Create the item to be inserted
+    url_path = path_to_call()
     item = {
         'ipaddress': public_ipv4,
-        'health': 'ok'
-        'url': path_to_call()
+        'health': 'ok',
+        'url': url_path
     }
 
     # Insert the item into the DynamoDB table
