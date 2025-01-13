@@ -37,7 +37,7 @@ http {
     # to return a good HTTP response
 
     # for UNIX domain socket setups
-    server unix:/tmp/gunicorn.sock fail_timeout=0;
+    server unix:/tmp/proxy.sock fail_timeout=0;
 
     # for a TCP configuration
     # server 192.168.0.7:8000 fail_timeout=0;

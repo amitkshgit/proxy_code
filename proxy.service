@@ -8,7 +8,7 @@ Group=1000
 WorkingDirectory=/home/ubuntu/webdocs
 Environment="PATH=/home/ubuntu/miniconda3/bin"
 #ExecStart=/usr/local/bin/gunicorn --workers 3 --bind unix:proxy.sock -m 007 wsgi:app
-ExecStart=/home/ubuntu/miniconda3/bin/gunicorn --workers=2 --reload test:app -b unix:/tmp/gunicorn.sock
+ExecStart=/home/ubuntu/miniconda3/bin/gunicorn --workers=2 --reload wsgi:app -b unix:/tmp/proxy.sock
 
 [Install]
 WantedBy=multi-user.target
