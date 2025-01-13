@@ -4,12 +4,10 @@ import requests
 
 
 def read_ddb_env_variable():
-    ddb_env_variable = os.environ.get('REGISTER_TABLE')
-    if env_variable:
-        print(f"The value of MY_ENV_VARIABLE is: {env_variable}")
-        return(ddb_env_variable)
-    else:
-        print("MY_ENV_VARIABLE is not set.")
+    ssm_client = boto3.client('ssm', region_name='us-east-2')
+    response = ssm_client.get_parameter(Name='proxy_env', WithDecryption=True)
+    proxy_db = response['Parameter']['Value']
+    return(proxy_db)
 
 def get_public_ipv4(token):
     url = "http://169.254.169.254/latest/meta-data/public-ipv4"
