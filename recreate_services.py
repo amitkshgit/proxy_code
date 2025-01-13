@@ -23,7 +23,7 @@ with open(new_file_name, "w") as file:
 with open("proxy_code/gunicorn.service", "r") as file:
     content = file.read()
 
-content = content.replace("test:app", f"{random_file_name}.py:{random_app_name}")
+content = content.replace("test:app", f"{random_file_name}:{random_app_name}")
 
 with open("proxy_code/gunicorn.service", "w") as file:
     file.write(content)
