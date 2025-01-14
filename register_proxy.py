@@ -4,19 +4,27 @@ import boto3
 import requests
 
 
-def path_to_call():
-    file_path = "/etc/systemd/system/gunicorn.service"
-    with open(file_path, 'r') as file:
-        content = file.read()
-
-    pattern = r'--reload\s*(.*?)\s*-b'
-    match = re.search(pattern, content)
-
-    if match:
-        result = match.group(1).replace(' ', '')
-        return result
-    else:
+def path_to_call(file_name="proxy.py"):
+    try:
+        # Read the contents of the file
+        with open(file_name, 'r') as file:
+            text = file.read()
+        
+        # Search for the pattern
+        pattern = r'app_\w{10}'
+        match = re.search(pattern, text)
+        
+        if match:
+            return match.group()
+        else:
+            return None
+    except FileNotFoundError:
+        print(f"Error: File '{file_name}' not found.")
         return None
+    except IOError:
+        print(f"Error: Unable to read file '{file_name}'.")
+        return None
+
 
 def read_ddb_env_variable():
     ssm_client = boto3.client('ssm', region_name='us-east-2')
