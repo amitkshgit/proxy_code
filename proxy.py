@@ -49,7 +49,7 @@ async def index():
     return '<h1>Nothing here</h1>'
 
 
-@app.route('/app_xjpdWoBTvD/<url>')
+@app.route('/fetch/<url>')
 async def user(url):
     #print(url)
     #print(b64d(url))
