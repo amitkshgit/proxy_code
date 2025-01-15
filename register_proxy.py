@@ -32,6 +32,21 @@ def read_ddb_env_variable():
     proxy_db = response['Parameter']['Value']
     return(proxy_db)
 
+def get_region(token):
+    url = "http://169.254.169.254/latest/meta-data/placement/region"
+    headers = {"X-aws-ec2-metadata-token": token}
+    response = requests.get(url, headers=headers)
+    region = response.text
+    return region
+
+def get_instance_id(token):
+    url = "http://169.254.169.254/latest/meta-data/instance-id"
+    headers = {"X-aws-ec2-metadata-token": token}
+    response = requests.get(url, headers=headers)
+    instance_id = response.text
+    return instance_id
+
+
 def get_public_ipv4(token):
     url = "http://169.254.169.254/latest/meta-data/public-ipv4"
     headers = {"X-aws-ec2-metadata-token": token}
@@ -52,6 +67,10 @@ def insert_public_ip_dynamodb():
 
     # Get the public IPv4 address
     public_ipv4 = get_public_ipv4(token)
+    # Get the region 
+    ec2_region = get_region(token)
+    # Get the instance-id
+    instance_id = get_instance_id(token)
 
     # Create a DynamoDB client with the specified region
     dynamodb = boto3.resource('dynamodb', region_name='us-west-2')
@@ -65,7 +84,9 @@ def insert_public_ip_dynamodb():
     item = {
         'ipaddress': public_ipv4,
         'health': 'ok',
-        'url': url_path
+        'url': url_path,
+        'region': ec2_region,
+        'instanceid': instance_id
     }
 
     # Insert the item into the DynamoDB table
