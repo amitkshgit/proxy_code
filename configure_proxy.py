@@ -16,7 +16,11 @@ def get_aws_token():
     token = response.text
     return token
 
-config_text = """
+# Fetch the public IP from EC2 metadata
+token = get_aws_token()
+public_ip = get_public_ipv4(token)
+
+config_text = f"""
 error_log /var/log/nginx/error.log;
 include /etc/nginx/modules-enabled/*.conf;
 
@@ -56,7 +60,7 @@ http {
     client_max_body_size 4G;
 
     # set the correct host(s) for your site
-    server_name w.x.y.z;
+    server_name {public_ip};
 
     keepalive_timeout 5;
 
@@ -85,12 +89,6 @@ http {
   }
 }"""
 
-# Fetch the public IP from EC2 metadata
-token = get_aws_token()
-public_ip = get_public_ipv4(token)
-
-# Replace the placeholder with the actual public IP
-config_text = config_text.replace('server_name w.x.y.z;', f'server_name {public_ip};')
 
 # Write the updated configuration to the nginx configuration file
 with open('/etc/nginx/nginx.conf', 'w') as file:
