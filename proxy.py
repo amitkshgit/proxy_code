@@ -11,7 +11,8 @@ async def b64d(s):
 async def scrape_c4ai(url):
     async with AsyncWebCrawler() as crawler:
         result = await crawler.arun(url=url)
-        return(result.markdown)
+        #return(result.markdown)
+        return([result.markdown,result.html])
 
 
 async def safe_get_request(url):
